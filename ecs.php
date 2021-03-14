@@ -16,8 +16,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PATHS, [
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__.'/src',
+        __DIR__.'/tests',
+    ]);
+    $parameters->set(Option::SKIP, [
+        __DIR__.'/tests/_support/_generated/*',
     ]);
 
     $parameters->set(Option::SETS, [

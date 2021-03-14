@@ -1,0 +1,17 @@
+actor: UnitTester
+modules:
+    enabled:
+        - Asserts
+        - App\Tests\Helper\Unit
+        - Symfony:
+              app_path: src
+              environment: test
+              debug: true
+#        - Doctrine2:
+#              depends: Symfony
+#              cleanup: true
+    step_decorators: ~
+
+#extensions:
+#    enabled:
+#        - App\Tests\Extension\RecreateDatabase
