@@ -28,3 +28,4 @@ coverage:
         - src/Migrations/*
         - src/ValueObject/*
         - src/Entity/*
+        - src/DataFixtures/*

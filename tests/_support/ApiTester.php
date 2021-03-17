@@ -2,6 +2,9 @@
 
 namespace App\Tests;
 
+use App\Controller\SecurityController;
+use Codeception\Scenario;
+
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -21,7 +24,21 @@ class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
 
-    /**
-     * Define custom actions here
-     */
+    public function __construct(Scenario $scenario)
+    {
+        parent::__construct($scenario);
+        $this->haveHttpHeader('Content-Type', 'application/json');
+        $this->haveHttpHeader('Accept', 'application/json');
+    }
+
+    public function authenticateUser(string $email = 'User0@localhost.domain', string $password = '123456'): array
+    {
+        $this->sendPost(SecurityController::ROUTE_LOGIN, [
+            'username' => $email,
+            'password' => $password,
+        ]);
+
+        $response = json_decode($this->grabResponse(), true);
+        return $response;
+    }
 }
