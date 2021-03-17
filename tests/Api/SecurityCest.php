@@ -20,11 +20,13 @@ class SecurityCest
     {
         $id = Uuid::fromString(UserFixtures::LOGIN_TEST)->toBinary();
         /** @var User $user */
-        $user = $I->grabEntityFromRepository(User::class, ['id' => $id]);
+        $user = $I->grabEntityFromRepository(User::class, [
+            'id' => $id,
+        ]);
 
         $I->sendPost(SecurityController::ROUTE_LOGIN, [
             'username' => $user->getEmail(),
-            'password' => '123456'
+            'password' => '123456',
         ]);
 
         $I->seeResponseCodeIs(HttpCode::OK);
@@ -35,7 +37,7 @@ class SecurityCest
         $auth = $I->authenticateUser();
 
         $I->sendPost(SecurityController::ROUTE_TOKEN_REFRESH, [
-            'refreshToken' => $auth['refreshToken']
+            'refreshToken' => $auth['refreshToken'],
         ]);
 
         $I->seeResponseCodeIs(HttpCode::OK);

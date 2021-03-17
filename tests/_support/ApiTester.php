@@ -38,7 +38,6 @@ class ApiTester extends \Codeception\Actor
             'password' => $password,
         ]);
 
-        $response = json_decode($this->grabResponse(), true);
-        return $response;
+        return json_decode($this->grabResponse(), true);
     }
 }
