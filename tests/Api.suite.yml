@@ -14,10 +14,10 @@ modules:
               headers:
                   Content-Type: application/json
                   Accept: application/json
-#        - Doctrine2:
-#              depends: Symfony
-#              cleanup: true # All doctrine queries will be wrapped in a transaction, which will be rolled back at the end of each test
+        - Doctrine2:
+              depends: Symfony
+              cleanup: true # All doctrine queries will be wrapped in a transaction, which will be rolled back at the end of each test
 
-#extensions:
-#    enabled:
-#        - App\Tests\Extension\RecreateDatabase
+extensions:
+    enabled:
+        - App\Tests\Extension\RecreateDatabase

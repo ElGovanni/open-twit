@@ -26,3 +26,6 @@ coverage:
     exclude:
         - src/Kernel.php
         - src/Migrations/*
+        - src/ValueObject/*
+        - src/Entity/*
+        - src/DataFixtures/*
