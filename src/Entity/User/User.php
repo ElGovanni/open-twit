@@ -2,6 +2,7 @@
 
 namespace App\Entity\User;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\User\UserRepository;
 use App\ValueObject\Role;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,17 +11,39 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="client")
  */
-#[UniqueEntity('username', groups: ['create'])]
-#[UniqueEntity('email', groups: ['create'])]
+#[ApiResource(
+    collectionOperations: [
+        "get",
+        "post" => [
+            "security" => "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
+            "validation_groups" => [self::CREATE],
+        ],
+    ],
+    itemOperations: [
+        "get",
+        "patch" => [
+            "security" => "is_granted('ROLE_USER') and object == user",
+            "denormalization_context" => ["groups" => [self::UPDATE]],
+            "normalization_context" => ["groups" => [self::READ]],
+        ],
+        "delete" => [
+            "security" => "is_granted('ROLE_ADMIN')"
+        ]
+    ],
+    denormalizationContext: ["groups" => [self::CREATE]],
+    normalizationContext: ["groups" => [self::READ]],
+)]
+#[UniqueEntity('username', groups: [self::CREATE])]
+#[UniqueEntity('email', groups: [self::CREATE])]
 class User implements UserInterface
 {
     public const ALPHA_NUM_ONESPACE = '/^(?!\d)[a-zA-Z\d]+(?: [a-zA-Z\d]+)*$/';
@@ -37,7 +60,7 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      */
-    #[Groups(['user:read'])]
+    #[Groups([self::READ])]
     private Uuid $id;
 
     /**
@@ -45,14 +68,14 @@ class User implements UserInterface
      */
     #[NotBlank(groups: [self::CREATE])]
     #[Length(min: 3, max: 20)]
-    #[Groups([self::CREATE, self::UPDATE])]
+    #[Groups([self::CREATE, self::READ])]
     private string $username;
 
     /**
      * @ORM\Column(type="string", length=32, nullable=true)
      */
-    #[Assert\Regex(self::ALPHA_NUM_ONESPACE)]
-    #[Groups([self::CREATE, self::READ, self::UPDATE])]
+    #[Regex(self::ALPHA_NUM_ONESPACE)]
+    #[Groups([self::READ, self::UPDATE])]
     private ?string $displayName = null;
 
     /**
@@ -61,7 +84,7 @@ class User implements UserInterface
     #[NotBlank(groups: [self::CREATE])]
     #[Email(groups: [self::CREATE])]
     #[Length(max: 60)]
-    #[Groups([self::CREATE, self::UPDATE, self::READ])]
+    #[Groups([self::CREATE, self::READ])]
     private string $email;
 
     /**
@@ -69,7 +92,7 @@ class User implements UserInterface
      */
     private ?array $roles = [Role::INACTIVE];
 
-    #[Groups([self::CREATE])]
+    #[Groups([self::READ])]
     #[SerializedName('roles')]
     private array $rolesHierarchy = [];
 
@@ -79,13 +102,13 @@ class User implements UserInterface
     private string $password;
 
     #[NotBlank(groups: [self::CREATE])]
-    #[Assert\Regex(
+    #[Regex(
         pattern: self::SECURE_PASSWORD_PATTERN,
         message: 'Password must be seven characters long and contain at least one digit, one upper case letter and one lower case letter',
         groups: [self::CREATE]),
     ]
     #[SerializedName('password')]
-    #[Groups([self::READ])]
+    #[Groups([self::CREATE])]
     private ?string $plainPassword = null;
 
     /**
@@ -116,7 +139,7 @@ class User implements UserInterface
 
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -141,7 +164,7 @@ class User implements UserInterface
 
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
