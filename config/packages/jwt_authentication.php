@@ -10,9 +10,12 @@ return static function(ContainerConfigurator $containerConfigurator): void {
         'encoder' => [
             'signature_algorithm' => 'HS256'
         ],
+        'user_identity_field' => 'email',
     ]);
     $containerConfigurator->extension('gesdinet_jwt_refresh_token', [
         'single_use' => true,
-        'token_parameter_name' => 'refreshToken'
+        'token_parameter_name' => 'refreshToken',
+        'user_identity_field' => 'email',
+        'user_provider' => 'security.user.provider.concrete.app_user_provider'
     ]);
 };

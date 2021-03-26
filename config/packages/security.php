@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $configurator): void {
                     'check_path' => SecurityController::ROUTE_LOGIN,
                     'success_handler' => 'lexik_jwt_authentication.handler.authentication_success',
                     'failure_handler' => 'lexik_jwt_authentication.handler.authentication_failure',
+                    'username_path' => 'login',
                 ],
                 'guard' => [
                     'authenticators' => [

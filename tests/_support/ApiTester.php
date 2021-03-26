@@ -34,7 +34,7 @@ class ApiTester extends \Codeception\Actor
     public function authenticateUser(string $email = 'User0@localhost.domain', string $password = '123456'): array
     {
         $this->sendPost(SecurityController::ROUTE_LOGIN, [
-            'username' => $email,
+            'login' => $email,
             'password' => $password,
         ]);
 

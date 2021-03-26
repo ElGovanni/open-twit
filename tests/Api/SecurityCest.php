@@ -25,7 +25,7 @@ class SecurityCest
         ]);
 
         $I->sendPost(SecurityController::ROUTE_LOGIN, [
-            'username' => $user->getEmail(),
+            'login' => $user->getEmail(),
             'password' => '123456',
         ]);
 

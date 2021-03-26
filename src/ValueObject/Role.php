@@ -4,5 +4,5 @@ namespace App\ValueObject;
 
 class Role
 {
-    public const INACTIVE = 'inactive';
+    public const INACTIVE = 'ROLE_INACTIVE';
 }
