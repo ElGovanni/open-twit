@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User\User;
+use App\ValueObject\Role;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
@@ -11,7 +12,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserSubscriber implements EventSubscriber
 {
     public function __construct(
-        private UserPasswordEncoderInterface $passwordEncoder
+        private bool $userConfirmEmail,
+        private UserPasswordEncoderInterface $passwordEncoder,
     ) {
     }
 
@@ -34,6 +36,13 @@ class UserSubscriber implements EventSubscriber
             $entity->setPassword(
                 $this->passwordEncoder->encodePassword($entity, $plainPassword)
             );
+        }
+
+        if(null === $entity->getCreatedAt()) {
+            $entity->setCreatedAt(new \DateTime());
+            if($this->userConfirmEmail) {
+                $entity->addRole(Role::INACTIVE);
+            }
         }
     }
 }

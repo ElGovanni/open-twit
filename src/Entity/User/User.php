@@ -4,7 +4,8 @@ namespace App\Entity\User;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\User\UserRepository;
-use App\ValueObject\Role;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -90,7 +91,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    private ?array $roles = [Role::INACTIVE];
+    private array $roles = [];
 
     #[Groups([self::READ])]
     #[SerializedName('roles')]
@@ -127,6 +128,16 @@ class User implements UserInterface
      */
     private ?string $confirmationToken = null;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTime $confirmationTokenExpireAt = null;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTime $createdAt = null;
+
     public function __construct(Uuid $id = null)
     {
         $this->id = $id ?? Uuid::v4();
@@ -151,13 +162,23 @@ class User implements UserInterface
 
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        return array_unique($roles);
+        return array_unique($this->roles);
     }
 
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function removeRole(string $role): self
+    {
+        $index = array_search($role, $this->roles);
+
+        if($index !== FALSE){
+            unset($this->roles[$index]);
+        }
 
         return $this;
     }
@@ -212,6 +233,17 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getConfirmationTokenExpireAt(): ?DateTimeInterface
+    {
+        return $this->confirmationTokenExpireAt;
+    }
+
+    public function setConfirmationTokenExpireAt(?DateTimeInterface $confirmationTokenExpireAt): self
+    {
+        $this->confirmationTokenExpireAt = $confirmationTokenExpireAt;
+        return $this;
+    }
+
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
@@ -259,5 +291,25 @@ class User implements UserInterface
     public function getSalt(): ?string
     {
         return null;
+    }
+
+    public function addRole(string $role): self
+    {
+        if(!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
     }
 }

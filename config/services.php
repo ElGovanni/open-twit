@@ -5,17 +5,25 @@ declare(strict_types=1);
 use ApiPlatform\Core\JsonSchema\SchemaFactoryInterface;
 use App\OpenApi\OpenApiFactory;
 use App\OpenApi\RequestInterface;
+use App\Security\ConfirmTokenGenerator\ConfirmTokenGeneratorInterface;
+use App\Security\ConfirmTokenGenerator\SimpleNumericalTokenGenerator;
 use Doctrine\Common\EventSubscriber;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->parameters()
+        ->set('app.mail.noreply', '%env(resolve:MAILER_NO_REPLY)%');
     $services = $containerConfigurator->services();
 
     $services->defaults()
         ->autowire()
-        ->autoconfigure();
+        ->autoconfigure()
+        ->bind('bool $userConfirmEmail', '%env(resolve:USER_CONFIRM_EMAIL)%')
+        ->bind('string $environment', '%kernel.environment%')
+        ->bind('string $mailNoReply', '%app.mail.noreply%')
+    ;
 
     $services->instanceof(EventSubscriber::class)
         ->tag('doctrine.event_subscriber');
@@ -28,6 +36,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->load('App\Controller\\', __DIR__ . '/../src/Controller/')
         ->tag('controller.service_arguments');
+
+    $services->alias(ConfirmTokenGeneratorInterface::class, SimpleNumericalTokenGenerator::class);
 
     $services->set(OpenApiFactory::class)
         ->decorate('api_platform.openapi.factory')

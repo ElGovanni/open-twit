@@ -4,6 +4,7 @@ namespace App\Tests\Unit\EventSubscriber;
 
 use App\Entity\User\User;
 use App\EventSubscriber\UserSubscriber;
+use App\ValueObject\Role;
 use Codeception\Test\Unit;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -23,7 +24,7 @@ class UserSubscriberTest extends Unit
         $user->setPlainPassword('123456');
 
         $preUpdateArgs = new LifecycleEventArgs($user, $this->entityManager);
-        $subscriber = new UserSubscriber($this->passwordEncoder);
+        $subscriber = new UserSubscriber(false, $this->passwordEncoder);
 
         $subscriber->prePersist($preUpdateArgs);
 
@@ -31,6 +32,21 @@ class UserSubscriberTest extends Unit
         $updatedUser = $preUpdateArgs->getEntity();
 
         $this->assertSame(self::encodedPassword, $updatedUser->getPassword());
+    }
+
+    public function testNewUserIsInactive()
+    {
+        $user = new User();
+
+        $preUpdateArgs = new LifecycleEventArgs($user, $this->entityManager);
+        $subscriber = new UserSubscriber(true, $this->passwordEncoder);
+
+        $subscriber->prePersist($preUpdateArgs);
+
+        /** @var User $updatedUser */
+        $updatedUser = $preUpdateArgs->getEntity();
+
+        $this->assertContains(Role::INACTIVE, $updatedUser->getRoles());
     }
 
     protected function _before()

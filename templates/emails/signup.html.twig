@@ -1,0 +1,9 @@
+<p>
+    You signed up as {{ username }} the following email:
+</p>
+<p><code>{{ email.to[0].address }}</code></p>
+
+<p>
+    <h2><code>Activation code: {{ code }}</code></h2>
+    (this code is valid until {{ expireAt|date('F jS H:i') }})
+</p>
