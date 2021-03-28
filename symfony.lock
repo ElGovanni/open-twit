@@ -109,6 +109,9 @@
     "doctrine/dbal": {
         "version": "2.12.1"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -709,17 +712,14 @@
     "symplify/easy-testing": {
         "version": "v9.2.6"
     },
-    "symplify/markdown-diff": {
-        "version": "v9.2.6"
-    },
     "symplify/package-builder": {
         "version": "v9.2.6"
     },
     "symplify/php-config-printer": {
         "version": "v9.2.6"
     },
-    "symplify/rule-doc-generator": {
-        "version": "v9.2.6"
+    "symplify/rule-doc-generator-contracts": {
+        "version": "v9.2.14"
     },
     "symplify/set-config-resolver": {
         "version": "v9.2.6"
