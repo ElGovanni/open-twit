@@ -138,6 +138,13 @@ class User implements UserInterface
      */
     private ?DateTime $createdAt = null;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ProfilePicture::class, cascade={"persist"})
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
+     */
+    #[Groups([self::READ])]
+    private ?ProfilePicture $profilePicture = null;
+
     public function __construct(Uuid $id = null)
     {
         $this->id = $id ?? Uuid::v4();
@@ -310,6 +317,17 @@ class User implements UserInterface
     public function setCreatedAt(?DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getProfilePicture(): ?ProfilePicture
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?ProfilePicture $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
         return $this;
     }
 }
