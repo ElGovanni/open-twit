@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
         "post" => [
             "controller" => ProfilePictureAction::class,
             "deserialize" => false,
-            "security" => "is_granted('ROLE_USER')",
+            "security" => "is_granted('ROLE_ACTIVE')",
             "validation_groups" => [self::CREATE],
             "openapi_context" => [
                 "requestBody" => [
@@ -62,6 +62,7 @@ class ProfilePicture
      * @ORM\Id()
      * @ORM\Column(type="uuid", unique=true)
      */
+    #[Groups([self::READ])]
     private Uuid $id;
 
     /**
