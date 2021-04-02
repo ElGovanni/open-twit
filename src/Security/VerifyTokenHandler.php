@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\ValueObject\Role;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class VerifyTokenHandler
@@ -16,7 +17,8 @@ class VerifyTokenHandler
 
         $user->removeRole(Role::INACTIVE);
         $user->setConfirmationToken(null);
-        $user->setConfirmationTokenExpireAt(new \DateTime());
+        $user->setConfirmationTokenExpireAt(new DateTime());
+        $user->addRole(Role::ACTIVE);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
