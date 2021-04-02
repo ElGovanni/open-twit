@@ -33,7 +33,7 @@ class SecurityController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $limiter = $confirmTokenLimiter->create($user->getId());
-        if (false === $limiter->consume()->isAccepted()) {
+        if ($limiter->consume()->isAccepted() === false) {
             throw new TooManyRequestsHttpException();
         }
 
@@ -56,7 +56,7 @@ class SecurityController extends AbstractController
         $command = new VerifyTokenEvent($user, $code);
 
         $violations = $validator->validate($command);
-        if($violations->count() !== 0) {
+        if ($violations->count() !== 0) {
             return $this->json($violations, Response::HTTP_OK);
         }
 

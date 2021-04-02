@@ -28,14 +28,14 @@ class ProfilePictureCest
         $I->amBearerAuthenticated($auth['token']);
 
         $I->sendPost('/users/profile_pictures', null, [
-            'file' => new UploadedFile(__DIR__.'/../../_data/profile_picture.jpeg', 'profile_picture.jpeg')
+            'file' => new UploadedFile(__DIR__ . '/../../_data/profile_picture.jpeg', 'profile_picture.jpeg'),
         ]);
 
         $I->seeResponseCodeIs(HttpCode::CREATED);
 
         $I->seeResponseMatchesJsonType([
             'id' => 'string',
-            'absolutePath' => 'string'
+            'absolutePath' => 'string',
         ]);
     }
 }

@@ -157,7 +157,7 @@ class User implements UserInterface
 
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return (string) $this->username;
     }
 
     public function setUsername(string $username): self
@@ -183,7 +183,7 @@ class User implements UserInterface
     {
         $index = array_search($role, $this->roles);
 
-        if($index !== FALSE){
+        if ($index !== false) {
             unset($this->roles[$index]);
         }
 
@@ -192,7 +192,7 @@ class User implements UserInterface
 
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -302,7 +302,7 @@ class User implements UserInterface
 
     public function addRole(string $role): self
     {
-        if(!in_array($role, $this->roles)) {
+        if (! in_array($role, $this->roles)) {
             $this->roles[] = $role;
         }
 

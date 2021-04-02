@@ -7,6 +7,7 @@ use App\Entity\User\ProfilePicture;
 use App\Entity\User\User;
 use App\ImageFilter\BoxResize;
 use App\Repository\User\ProfilePictureRepository;
+use DateTime;
 use League\Flysystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFileSystem;
@@ -35,19 +36,20 @@ class ProfilePictureAction extends AbstractController
         $picture->setFile($file);
 
         $violations = $validator->validate($picture);
-        if(count($violations)) {
+        if (count($violations)) {
             throw new ValidationException($violations);
         }
 
-        if(null !== $user->getProfilePicture()) {
+        if ($user->getProfilePicture() !== null) {
             $pictureRepository->remove($user->getProfilePicture());
         }
         $picture->setUser($user);
 
-        $dateNow = new \DateTime();
-        $path = sprintf("profile_picture/%s/%s.webp",
+        $dateNow = new DateTime();
+        $path = sprintf(
+            'profile_picture/%s/%s.webp',
             $dateNow->getTimestamp(),
-            uniqid($user->getUsername()."_")
+            uniqid($user->getUsername() . '_')
         );
 
         $resizedData = $boxResize->applyFilter($picture->getFile(), 250, 250);

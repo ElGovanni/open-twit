@@ -12,7 +12,7 @@ class FilesystemAdapterFactoryTest extends Unit
 {
     public function testCreateDevAdapter()
     {
-        $tmp = sys_get_temp_dir().'/project-test-upload';
+        $tmp = sys_get_temp_dir() . '/project-test-upload';
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
         $adapter = FilesystemAdapterFactory::createAdapter('dev', $urlGenerator, $tmp);
@@ -26,7 +26,7 @@ class FilesystemAdapterFactoryTest extends Unit
     public function testCreateProdAdapter()
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $adapter = FilesystemAdapterFactory::createAdapter('prod', $urlGenerator, '', 'project-id', __DIR__.'/../../_data/gcloud-service-key.json', 'project-bucket');
+        $adapter = FilesystemAdapterFactory::createAdapter('prod', $urlGenerator, '', 'project-id', __DIR__ . '/../../_data/gcloud-service-key.json', 'project-bucket');
 
         $this->assertInstanceOf(GoogleStorageAdapter::class, $adapter);
     }

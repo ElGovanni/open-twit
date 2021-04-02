@@ -39,7 +39,7 @@ class SendConfirmTokenHandler
             ->context([
                 'username' => $user->getUsername(),
                 'code' => $user->getConfirmationToken(),
-                'expireAt' => $user->getConfirmationTokenExpireAt()
+                'expireAt' => $user->getConfirmationTokenExpireAt(),
             ])
         ;
 

@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Security;
 use App\Entity\User\User;
 use App\Security\VerifyTokenEvent;
 use Codeception\Test\Unit;
+use DateTime;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
@@ -17,7 +18,6 @@ class VerifyTokenEventTest extends Unit
 
         $executionContext = $this->createMock(ExecutionContextInterface::class);
         $executionContext->expects($this->once())->method('buildViolation')->willReturn($builder);
-
 
         $code = '123456';
         $user = new User();
@@ -53,9 +53,8 @@ class VerifyTokenEventTest extends Unit
         $executionContext = $this->createMock(ExecutionContextInterface::class);
         $executionContext->expects($this->once())->method('buildViolation')->willReturn($builder);
 
-
         $code = '123456';
-        $expiredAt = new \DateTime('-10 year');
+        $expiredAt = new DateTime('-10 year');
         $user = new User();
         $user->setUsername('Test');
         $user->setConfirmationToken($code);
@@ -73,9 +72,8 @@ class VerifyTokenEventTest extends Unit
         $executionContext = $this->createMock(ExecutionContextInterface::class);
         $executionContext->expects($this->never())->method('buildViolation')->willReturn($builder);
 
-
         $code = '123456';
-        $expiredAt = new \DateTime('+10 year');
+        $expiredAt = new DateTime('+10 year');
         $user = new User();
         $user->setUsername('Test');
         $user->setConfirmationToken($code);

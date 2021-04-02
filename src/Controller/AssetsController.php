@@ -18,7 +18,7 @@ class AssetsController extends AbstractController
 
         $file = $filesystem->read($path);
         return new Response($file, headers: [
-            'Content-Type' => $filesystem->getMimetype($path)
+            'Content-Type' => $filesystem->getMimetype($path),
         ]);
     }
 }

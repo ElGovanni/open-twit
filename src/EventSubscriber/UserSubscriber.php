@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\User\User;
 use App\ValueObject\Role;
+use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
@@ -38,9 +39,9 @@ class UserSubscriber implements EventSubscriber
             );
         }
 
-        if(null === $entity->getCreatedAt()) {
-            $entity->setCreatedAt(new \DateTime());
-            if($this->userConfirmEmail) {
+        if ($entity->getCreatedAt() === null) {
+            $entity->setCreatedAt(new DateTime());
+            if ($this->userConfirmEmail) {
                 $entity->addRole(Role::INACTIVE);
             }
         }

@@ -15,12 +15,6 @@ class ProfilePictureSubscriberTest extends Unit
 {
     private EntityManagerInterface $entityManager;
 
-    protected function _before()
-    {
-        parent::_before();
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
-    }
-
     public function testPostLoadSetsFileAbsolutePath()
     {
         $profilePicture = new ProfilePicture();
@@ -54,5 +48,11 @@ class ProfilePictureSubscriberTest extends Unit
         $subscriber = new ProfilePictureSubscriber($fileSystem, $logger);
 
         $subscriber->preRemove($args);
+    }
+
+    protected function _before()
+    {
+        parent::_before();
+        $this->entityManager = $this->createMock(EntityManagerInterface::class);
     }
 }

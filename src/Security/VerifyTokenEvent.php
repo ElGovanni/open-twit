@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User\User;
+use DateTime;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -30,7 +31,7 @@ class VerifyTokenEvent
             return;
         }
 
-        if($this->user && $this->user->getConfirmationTokenExpireAt() <= new \DateTime()) {
+        if ($this->user && $this->user->getConfirmationTokenExpireAt() <= new DateTime()) {
             $context
                 ->buildViolation('Token expired.')
                 ->atPath('user.confirmationTokenExpireAt')

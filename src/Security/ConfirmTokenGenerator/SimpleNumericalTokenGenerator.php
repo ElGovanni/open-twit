@@ -17,6 +17,6 @@ class SimpleNumericalTokenGenerator implements ConfirmTokenGeneratorInterface
 
     public function expireAt(): DateTimeInterface
     {
-        return new DateTime(sprintf("+%s", self::EXPIRE_TIME));
+        return new DateTime(sprintf('+%s', self::EXPIRE_TIME));
     }
 }

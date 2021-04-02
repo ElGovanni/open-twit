@@ -31,7 +31,7 @@ class ProfilePictureSubscriber implements EventSubscriber
     {
         $entity = $args->getEntity();
 
-        if(!$entity instanceof ProfilePicture) {
+        if (! $entity instanceof ProfilePicture) {
             return;
         }
 
@@ -44,7 +44,7 @@ class ProfilePictureSubscriber implements EventSubscriber
     {
         $entity = $args->getEntity();
 
-        if(!$entity instanceof ProfilePicture) {
+        if (! $entity instanceof ProfilePicture) {
             return;
         }
 

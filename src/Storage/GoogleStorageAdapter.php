@@ -6,5 +6,4 @@ use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter as BaseStorageAdapt
 
 class GoogleStorageAdapter extends BaseStorageAdapter implements UrlAdapterInterface
 {
-
 }

@@ -5,12 +5,12 @@ namespace App\Entity\User;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\Users\ProfilePictureAction;
 use App\Repository\User\ProfilePictureRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilePictureRepository::class)
@@ -18,37 +18,37 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ApiResource(
     collectionOperations: [
-        "post" => [
-            "controller" => ProfilePictureAction::class,
-            "deserialize" => false,
-            "security" => "is_granted('ROLE_ACTIVE')",
-            "validation_groups" => [self::CREATE],
-            "openapi_context" => [
-                "requestBody" => [
-                    "content" => [
-                        "multipart/form-data" => [
-                            "schema" => [
-                                "type" => "object",
-                                "properties" => [
-                                    "file" => [
-                                        "type" => "string",
-                                        "format" => "binary"
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+        'post' => [
+            'controller' => ProfilePictureAction::class,
+            'deserialize' => false,
+            'security' => "is_granted('ROLE_ACTIVE')",
+            'validation_groups' => [self::CREATE],
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
-        "get",
+        'get',
     ],
-    iri: "http://schema.org/MediaObject",
+    iri: 'http://schema.org/MediaObject',
     itemOperations: [
-        "get",
+        'get',
     ],
-    normalizationContext: ["groups" => [self::READ]],
-    routePrefix: "/users"
+    normalizationContext: ['groups' => [self::READ]],
+    routePrefix: '/users'
 )]
 class ProfilePicture
 {
@@ -57,6 +57,10 @@ class ProfilePicture
     public const CREATE = 'file:create';
 
     public const UPDATE = 'file:update';
+
+    #[SerializedName('absolutePath')]
+    #[Groups([self::READ])]
+    public string $absolutePath;
 
     /**
      * @ORM\Id()
@@ -79,10 +83,6 @@ class ProfilePicture
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist"})
      */
     private User $user;
-
-    #[SerializedName('absolutePath')]
-    #[Groups([self::READ])]
-    public string $absolutePath;
 
     public function __construct()
     {

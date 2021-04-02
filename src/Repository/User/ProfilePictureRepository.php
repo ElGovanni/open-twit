@@ -15,7 +15,7 @@ class ProfilePictureRepository extends ServiceEntityRepository
 
     public function remove(ProfilePicture $profilePicture): void
     {
-        if(null === $this->find($profilePicture->getId())) {
+        if ($this->find($profilePicture->getId()) === null) {
             return;
         }
 
